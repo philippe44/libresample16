@@ -57,3 +57,8 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+Win32/
+__history/
+*.cb*
+resampler
+buildfilter
