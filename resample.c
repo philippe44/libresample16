@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
 	int outType, outFormat;
 	FILE *in, *out;
 	struct resample16_s *r;
-	HWORD *ibuf = malloc(BUFSIZE);
-	HWORD *obuf = malloc(BUFSIZE);
+	HWORD *ibuf;
+	HWORD *obuf;
 	int rate;
 
 	struct stat statbuf;
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 		  else if (qual == 'm') quality = RESAMPLE16_MED;
 		}
 		if (trace)
-		  printf("Quality %d", quality);
+		  printf("Quality %d\n", quality);
 		break;
 	case 't':
 		if (*(argv[0]+1) == 'e') { 		/* -terse */
@@ -201,6 +201,9 @@ int main(int argc, char *argv[])
 
 	r = resample16_create(newsrate / insrate, quality, NULL, interpFilt);
 
+	ibuf = malloc(BUFSIZE);
+	obuf = malloc(BUFSIZE * (newsrate / insrate + 1));
+
 	while (1) {
 		int n = fread(ibuf, 4, BUFSIZE/4, in);
 		if (!n) break;
@@ -209,6 +212,9 @@ int main(int argc, char *argv[])
 	}
 
 	resample16_delete(r);
+
+	free(ibuf);
+	free(obuf);
 
 	fclose(in);
 	fclose(out);

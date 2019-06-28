@@ -298,26 +298,27 @@ static WORD FilterUp(const HWORD Imp[], const HWORD ImpD[],
 		     HWORD *Xp, HWORD Ph, HWORD Inc)
 {
 	const HWORD *Hp, *Hdp = NULL, *End;
-    HWORD a = 0;
-    WORD v, t;
-    
-    v=0;
-    Hp = &Imp[Ph>>Na];
-    End = &Imp[Nwing];
-    if (Interp) {
+	HWORD a = 0;
+	WORD v, t;
+	int count = 0;
+
+	v=0;
+	Hp = &Imp[Ph>>Na];
+	End = &Imp[Nwing];
+	if (Interp) {
 	Hdp = &ImpD[Ph>>Na];
 	a = Ph & Amask;
-    }
-    if (Inc == 1)		/* If doing right wing...              */
-    {				/* ...drop extra coeff, so when Ph is  */
+	}
+	if (Inc == 1)		/* If doing right wing...              */
+	{				/* ...drop extra coeff, so when Ph is  */
 	End--;			/*    0.5, we don't do too many mult's */
 	if (Ph == 0)		/* If the phase is zero...           */
 	{			/* ...then we've already skipped the */
-	    Hp += Npc;		/*    first sample, so we must also  */
-	    Hdp += Npc;		/*    skip ahead in Imp[] and ImpD[] */
+		Hp += Npc;		/*    first sample, so we must also  */
+		Hdp += Npc;		/*    skip ahead in Imp[] and ImpD[] */
 	}
-    }
-    if (Interp)
+	}
+	if (Interp)
       while (Hp < End) {
 	  t = *Hp;		/* Get filter coeff */
 	  t += (((WORD)*Hdp)*a)>>Na; /* t is now interp'd filter coeff */
